@@ -1,589 +1,245 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full bg-slate-100 text-slate-800">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>FitCouple 🎄 Meta Natal</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Chart.js para gráficos profissionais -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitCouple - Meta Semanal</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --success: #10B981;
+            --bg: #F3F4F6;
+            --card: #FFFFFF;
+            --text: #1F2937;
+        }
 
-  <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    .card-vibrant {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-    }
-  </style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+        }
 
-  <meta name="theme-color" content="#f1f5f9">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        .container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #6366F1, #4F46E5);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .meta-badge {
+            font-size: 0.8rem;
+            background-color: #EEF2FF;
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        input[type="number"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #4338CA;
+        }
+
+        .progress-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #4B5563;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 200px;
+            margin-top: 15px;
+        }
+    </style>
 </head>
-<body class="h-full antialiased flex flex-col bg-gradient-to-br from-amber-50/50 via-slate-100 to-emerald-50/40">
+<body>
 
-  <!-- ================= TELA SELEÇÃO DE PERFIL ================= -->
-  <div id="screen-profile-select" class="min-h-full flex flex-col justify-center items-center p-6 text-center">
-    <div class="max-w-md w-full space-y-8">
-      <div>
-        <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-tr from-amber-400 via-rose-400 to-emerald-400 p-1 shadow-xl mb-4">
-          <div class="w-full h-full bg-white rounded-[22px] flex items-center justify-center">
-            <i class="fa-solid fa-fire text-3xl text-rose-500"></i>
-          </div>
-        </div>
-        <h1 class="text-3xl font-extrabold tracking-tight text-slate-800">FitCouple 🎄</h1>
-        <p class="mt-2 text-sm text-slate-500 font-medium">Meta Emagrecimento & Saúde até o Natal</p>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4 my-8">
-        <button onclick="selectProfile('welton')" class="group relative bg-white p-6 rounded-3xl border-2 border-emerald-200 hover:border-emerald-500 transition-all text-left shadow-lg shadow-emerald-500/10 hover:scale-[1.02] active:scale-95">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-white flex items-center justify-center font-black text-2xl mb-4 shadow-md shadow-emerald-500/30">W</div>
-          <span class="block font-bold text-lg text-slate-800 group-hover:text-emerald-600 transition-colors">Welton</span>
-          <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1 mt-1">
-            <i class="fa-solid fa-bolt text-[10px]"></i> Foco Total
-          </span>
-        </button>
-
-        <button onclick="selectProfile('andressa')" class="group relative bg-white p-6 rounded-3xl border-2 border-rose-200 hover:border-rose-500 transition-all text-left shadow-lg shadow-rose-500/10 hover:scale-[1.02] active:scale-95">
-          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-rose-500 to-fuchsia-500 text-white flex items-center justify-center font-black text-2xl mb-4 shadow-md shadow-rose-500/30">A</div>
-          <span class="block font-bold text-lg text-slate-800 group-hover:text-rose-600 transition-colors">Andressa</span>
-          <span class="text-xs text-rose-600 font-semibold flex items-center gap-1 mt-1">
-            <i class="fa-solid fa-gem text-[10px]"></i> Foco Total
-          </span>
-        </button>
-      </div>
-
-      <div class="text-xs text-slate-400 font-medium">
-        <i class="fa-solid fa-shield-halved mr-1"></i> Dados armazenados localmente
-      </div>
+<div class="container">
+    <div class="header">
+        <h1>👩‍❤️‍👨 FitCouple</h1>
+        <p>Acompanhamento de Emagrecimento</p>
     </div>
-  </div>
 
-  <!-- ================= TELA PRINCIPAL ================= -->
-  <div id="screen-dashboard" class="hidden min-h-full flex flex-col pb-24">
-    <!-- Header -->
-    <header class="bg-white/80 backdrop-blur border-b border-slate-200 sticky top-0 z-20 px-5 py-4 flex items-center justify-between shadow-sm">
-      <div class="flex items-center space-x-3">
-        <div id="user-avatar-badge" class="w-10 h-10 rounded-2xl flex items-center justify-center font-black text-base text-white shadow-md">W</div>
-        <div>
-          <h2 id="user-name" class="font-extrabold text-slate-800 text-base tracking-tight">Welton</h2>
-          <div class="flex items-center gap-2">
-            <span class="text-[11px] text-slate-500 font-medium flex items-center gap-1">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Tirzepatida
-            </span>
-          </div>
+    <!-- ANDRESSA -->
+    <div class="card">
+        <div class="card-title">
+            <span>Andressa</span>
+            <span class="meta-badge">Meta: -800g / semana</span>
         </div>
-      </div>
-      <button onclick="switchUser()" class="text-xs text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-xl transition font-bold flex items-center gap-1.5 border border-slate-200 active:scale-95">
-        <i class="fa-solid fa-users-viewfinder text-slate-500"></i> Trocar
-      </button>
-    </header>
-
-    <main class="flex-1 p-4 max-w-lg mx-auto w-full space-y-4">
-
-      <!-- ABA 1: INÍCIO -->
-      <div id="tab-home" class="space-y-4">
-        
-        <!-- Banner Countdown Natal -->
-        <div id="banner-natal" class="p-5 rounded-3xl relative overflow-hidden shadow-xl text-white transition-all">
-          <div class="flex justify-between items-start relative z-10">
-            <div>
-              <span class="text-xs uppercase font-extrabold tracking-wider text-white/90 flex items-center gap-1.5">
-                <i class="fa-solid fa-tree text-yellow-300"></i> Meta Natal 🎄
-              </span>
-              <div id="days-countdown" class="text-3xl font-black mt-1 tracking-tight">-- dias</div>
-            </div>
-            <div class="text-right bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-2xl border border-white/30">
-              <span class="text-[10px] text-white/90 block uppercase font-bold">Ritmo Semanal</span>
-              <div id="weekly-rate" class="text-sm font-extrabold text-white">-- kg/sem</div>
-            </div>
-          </div>
-
-          <!-- Barra de Progresso do Peso -->
-          <div class="mt-4 relative z-10">
-            <div class="flex justify-between text-xs font-semibold text-white/90 mb-1.5">
-              <span>Progresso do Objetivo</span>
-              <span id="progress-percent">0%</span>
-            </div>
-            <div class="w-full bg-black/20 h-3.5 rounded-full overflow-hidden p-0.5 border border-white/20">
-              <div id="progress-bar-fill" class="h-full rounded-full transition-all duration-700 bg-amber-300" style="width: 0%"></div>
-            </div>
-          </div>
+        <div class="input-group">
+            <input type="number" id="weightAndressa" step="0.1" placeholder="Peso atual (kg)">
+            <button onclick="addWeight('Andressa')">Salvar</button>
         </div>
-
-        <!-- Métrica de Peso em Destaque -->
-        <div class="grid grid-cols-3 gap-3">
-          <div class="card-vibrant p-3.5 rounded-2xl border border-slate-200 text-center">
-            <span class="text-[11px] text-slate-400 block font-bold uppercase mb-0.5">Inicial</span>
-            <span id="weight-initial" class="text-base font-extrabold text-slate-700">-- kg</span>
-          </div>
-          <div class="card-vibrant p-3.5 rounded-2xl border-2 border-emerald-400 text-center relative overflow-hidden shadow-md">
-            <span class="text-[11px] text-emerald-600 block font-bold uppercase mb-0.5">Atual</span>
-            <span id="weight-current" class="text-lg font-black text-slate-900">-- kg</span>
-          </div>
-          <div class="card-vibrant p-3.5 rounded-2xl border border-slate-200 text-center">
-            <span class="text-[11px] text-slate-400 block font-bold uppercase mb-0.5">Meta</span>
-            <span id="weight-target" class="text-base font-extrabold text-slate-700">-- kg</span>
-          </div>
+        <div class="progress-info" id="infoAndressa">Carregando histórico...</div>
+        <div class="chart-container">
+            <canvas id="chartAndressa"></canvas>
         </div>
+    </div>
 
-        <!-- Gráfico de Evolução de Peso -->
-        <div class="card-vibrant p-4 rounded-3xl border border-slate-200">
-          <div class="flex justify-between items-center mb-2">
-            <h3 class="text-xs uppercase font-extrabold tracking-wider text-slate-500 flex items-center gap-2">
-              <i class="fa-solid fa-chart-line text-emerald-500"></i> Evolução do Peso
-            </h3>
-            <span class="text-[10px] font-bold text-slate-400">Histórico Recente</span>
-          </div>
-          <div class="h-44 w-full">
-            <canvas id="weightChart"></canvas>
-          </div>
+    <!-- WELTON -->
+    <div class="card">
+        <div class="card-title">
+            <span>Welton</span>
+            <span class="meta-badge">Meta: -900g / semana</span>
         </div>
-
-        <!-- Input Rápido de Peso -->
-        <div class="card-vibrant p-4 rounded-3xl border border-slate-200">
-          <h3 class="text-xs uppercase font-extrabold tracking-wider text-slate-500 mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-scale-balanced text-emerald-500"></i> Registrar Peso de Hoje
-          </h3>
-          <form onsubmit="saveWeight(event)" class="flex gap-2">
-            <input type="number" step="0.1" id="input-weight" placeholder="Ex: 82.5" required class="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-sm font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition">
-            <button type="submit" id="btn-save-weight" class="font-extrabold px-5 py-2.5 rounded-2xl text-sm transition shadow-md text-white active:scale-95">
-              Salvar
-            </button>
-          </form>
+        <div class="input-group">
+            <input type="number" id="weightWelton" step="0.1" placeholder="Peso atual (kg)">
+            <button onclick="addWeight('Welton')">Salvar</button>
         </div>
-
-      </div>
-
-      <!-- ABA 2: PROTOCOLO TIRZEPATIDA -->
-      <div id="tab-medication" class="space-y-4 hidden">
-        <div class="card-vibrant p-5 rounded-3xl border border-slate-200">
-          <div class="flex justify-between items-center mb-4">
-            <div>
-              <h3 class="font-extrabold text-slate-800 text-base">Aplicações Tirzepatida</h3>
-              <p class="text-xs text-slate-500">Acompanhamento semanal de doses</p>
-            </div>
-            <span id="dose-label-pill" class="text-xs px-3 py-1 rounded-full font-bold border">
-              Dose: -- mg
-            </span>
-          </div>
-
-          <form onsubmit="saveDose(event)" class="space-y-3">
-            <div>
-              <label class="text-xs font-semibold text-slate-500 block mb-1">Dosagem (mg)</label>
-              <select id="select-dose-mg" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs font-bold text-slate-800 focus:outline-none">
-                <option value="2.5">2.5 mg (Inicial)</option>
-                <option value="5.0">5.0 mg</option>
-                <option value="7.5">7.5 mg</option>
-                <option value="10.0">10.0 mg</option>
-                <option value="12.5">12.5 mg</option>
-                <option value="15.0">15.0 mg</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="text-xs font-semibold text-slate-500 block mb-1">Local da Aplicação</label>
-              <select id="select-site" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs font-bold text-slate-800 focus:outline-none">
-                <option value="Abdômen Direito">Abdômen (Lado Direito)</option>
-                <option value="Abdômen Esquerdo">Abdômen (Lado Esquerdo)</option>
-                <option value="Coxa Direita">Coxa Direita</option>
-                <option value="Coxa Esquerda">Coxa Esquerda</option>
-                <option value="Braço Direito">Braço Direito</option>
-                <option value="Braço Esquerdo">Braço Esquerdo</option>
-              </select>
-            </div>
-
-            <button type="submit" id="btn-save-dose" class="w-full font-extrabold py-3 rounded-2xl text-xs transition shadow-md text-white mt-2 active:scale-95">
-              <i class="fa-solid fa-syringe mr-1.5"></i> Registrar Aplicação Semanal
-            </button>
-          </form>
+        <div class="progress-info" id="infoWelton">Carregando histórico...</div>
+        <div class="chart-container">
+            <canvas id="chartWelton"></canvas>
         </div>
+    </div>
+</div>
 
-        <div class="card-vibrant p-4 rounded-3xl border border-slate-200">
-          <h4 class="text-xs uppercase font-extrabold tracking-wider text-slate-400 mb-3">Histórico de Aplicações</h4>
-          <div id="dose-history-list" class="space-y-2"></div>
-        </div>
-      </div>
-
-      <!-- ABA 3: ACADEMIA & TREINOS -->
-      <div id="tab-gym" class="space-y-4 hidden">
-        <div class="card-vibrant p-5 rounded-3xl border border-slate-200">
-          <div class="flex items-center justify-between mb-4">
-            <div>
-              <h3 class="font-extrabold text-slate-800 text-base">Diário de Academia</h3>
-              <p class="text-xs text-slate-500">Marque o treino concluído hoje</p>
-            </div>
-            <div class="text-right">
-              <span class="text-xs text-slate-400 block font-medium">Total Registrado</span>
-              <span id="workout-count-month" class="text-sm font-black text-emerald-600">0 Treinos</span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2.5 mb-2">
-            <button onclick="recordWorkout('Pernas / Glúteos 🍑')" class="bg-slate-50 hover:bg-slate-100 p-3.5 rounded-2xl border border-slate-200 text-left transition flex items-center gap-3 active:scale-95">
-              <i class="fa-solid fa-person-running text-rose-500 text-xl"></i>
-              <div>
-                <span class="text-xs font-bold text-slate-800 block">Pernas / Glúteos</span>
-                <span class="text-[10px] text-slate-500">Membros Inf.</span>
-              </div>
-            </button>
-
-            <button onclick="recordWorkout('Superiores 💪')" class="bg-slate-50 hover:bg-slate-100 p-3.5 rounded-2xl border border-slate-200 text-left transition flex items-center gap-3 active:scale-95">
-              <i class="fa-solid fa-dumbbell text-teal-500 text-xl"></i>
-              <div>
-                <span class="text-xs font-bold text-slate-800 block">Superiores</span>
-                <span class="text-[10px] text-slate-500">Costas/Peito</span>
-              </div>
-            </button>
-
-            <button onclick="recordWorkout('Cardio & Core 🏃‍♂️')" class="bg-slate-50 hover:bg-slate-100 p-3.5 rounded-2xl border border-slate-200 text-left transition flex items-center gap-3 active:scale-95">
-              <i class="fa-solid fa-heart-pulse text-amber-500 text-xl"></i>
-              <div>
-                <span class="text-xs font-bold text-slate-800 block">Cardio & Core</span>
-                <span class="text-[10px] text-slate-500">Esteira/Aparelhos</span>
-              </div>
-            </button>
-
-            <button onclick="recordWorkout('Treino Completo 🔥')" class="bg-slate-50 hover:bg-slate-100 p-3.5 rounded-2xl border border-slate-200 text-left transition flex items-center gap-3 active:scale-95">
-              <i class="fa-solid fa-fire text-purple-500 text-xl"></i>
-              <div>
-                <span class="text-xs font-bold text-slate-800 block">Full Body</span>
-                <span class="text-[10px] text-slate-500">Treino Geral</span>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <div class="card-vibrant p-4 rounded-3xl border border-slate-200">
-          <h4 class="text-xs uppercase font-extrabold tracking-wider text-slate-400 mb-3">Últimos Treinos</h4>
-          <div id="workout-history-list" class="space-y-2"></div>
-        </div>
-      </div>
-
-      <!-- ABA 4: CONFIGURAÇÕES -->
-      <div id="tab-settings" class="space-y-4 hidden">
-        <div class="card-vibrant p-5 rounded-3xl border border-slate-200 space-y-4">
-          <h3 class="font-extrabold text-slate-800 text-base flex items-center gap-2">
-            <i class="fa-solid fa-sliders text-slate-500"></i> Ajustar Metas e Perfil
-          </h3>
-
-          <div>
-            <label class="text-xs font-semibold text-slate-500 block mb-1">Peso Inicial (kg)</label>
-            <input type="number" step="0.1" id="config-initial" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs font-bold text-slate-800">
-          </div>
-
-          <div>
-            <label class="text-xs font-semibold text-slate-500 block mb-1">Meta de Peso para o Natal (kg)</label>
-            <input type="number" step="0.1" id="config-target" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 text-xs font-bold text-slate-800">
-          </div>
-
-          <button onclick="saveConfigs()" id="btn-save-configs" class="w-full font-extrabold py-3 rounded-2xl text-xs transition shadow-md text-white active:scale-95">
-            Salvar Novas Metas
-          </button>
-        </div>
-      </div>
-
-    </main>
-
-    <!-- NAVBAR INFERIOR -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur border-t border-slate-200 px-6 py-2.5 z-30 flex justify-around items-center max-w-lg mx-auto shadow-lg">
-      <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center gap-1 text-emerald-600 transition">
-        <i class="fa-solid fa-house text-lg"></i>
-        <span class="text-[10px] font-bold">Início</span>
-      </button>
-
-      <button onclick="switchTab('medication')" id="nav-medication" class="nav-btn flex flex-col items-center gap-1 text-slate-400 transition">
-        <i class="fa-solid fa-syringe text-lg"></i>
-        <span class="text-[10px] font-bold">Doses</span>
-      </button>
-
-      <button onclick="switchTab('gym')" id="nav-gym" class="nav-btn flex flex-col items-center gap-1 text-slate-400 transition">
-        <i class="fa-solid fa-dumbbell text-lg"></i>
-        <span class="text-[10px] font-bold">Academia</span>
-      </button>
-
-      <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex flex-col items-center gap-1 text-slate-400 transition">
-        <i class="fa-solid fa-gear text-lg"></i>
-        <span class="text-[10px] font-bold">Metas</span>
-      </button>
-    </nav>
-  </div>
-
-  <!-- JAVASCRIPT -->
-  <script>
-    let activeProfile = null;
-    let currentTab = 'home';
-    let chartInstance = null;
-
-    const defaultData = {
-      welton: {
-        name: 'Welton',
-        avatar: 'W',
-        initial: 95.0,
-        target: 82.0,
-        current: 95.0,
-        weights: [{ date: '01/10', weight: 95.0 }],
-        doses: [],
-        workouts: []
-      },
-      andressa: {
-        name: 'Andressa',
-        avatar: 'A',
-        initial: 70.0,
-        target: 60.0,
-        current: 70.0,
-        weights: [{ date: '01/10', weight: 70.0 }],
-        doses: [],
-        workouts: []
-      }
+<script>
+    const metas = {
+        Andressa: 0.8, // 800g por semana
+        Welton: 0.9    // 900g por semana
     };
 
-    function getDB() {
-      const data = localStorage.getItem('fitcouple_v2_db');
-      return data ? JSON.parse(data) : defaultData;
+    let data = JSON.parse(localStorage.getItem('fitCoupleData')) || {
+        Andressa: [],
+        Welton: []
+    };
+
+    const charts = {};
+
+    function initChart(user, color) {
+        const ctx = document.getElementById(`chart${user}`).getContext('2d');
+        charts[user] = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data[user].map(entry => entry.date),
+                datasets: [{
+                    label: 'Peso (kg)',
+                    data: data[user].map(entry => entry.weight),
+                    borderColor: color,
+                    backgroundColor: color + '22',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: false }
+                }
+            }
+        });
+        updateInfo(user);
     }
 
-    function saveDB(db) {
-      localStorage.setItem('fitcouple_v2_db', JSON.stringify(db));
+    function addWeight(user) {
+        const input = document.getElementById(`weight${user}`);
+        const weight = parseFloat(input.value);
+        if (!weight) return;
+
+        const dateStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        data[user].push({ date: dateStr, weight: weight });
+        
+        localStorage.setItem('fitCoupleData', JSON.stringify(data));
+        
+        charts[user].data.labels.push(dateStr);
+        charts[user].data.datasets[0].data.push(weight);
+        charts[user].update();
+
+        input.value = '';
+        updateInfo(user);
     }
 
-    // Auto-login no último perfil selecionado
-    window.addEventListener('DOMContentLoaded', () => {
-      const lastUser = localStorage.getItem('fitcouple_active_user');
-      if (lastUser) {
-        selectProfile(lastUser);
-      }
-    });
-
-    function selectProfile(key) {
-      activeProfile = key;
-      localStorage.setItem('fitcouple_active_user', key);
-      document.getElementById('screen-profile-select').classList.add('hidden');
-      document.getElementById('screen-dashboard').classList.remove('hidden');
-      applyTheme();
-      renderDashboard();
-    }
-
-    function switchUser() {
-      activeProfile = null;
-      localStorage.removeItem('fitcouple_active_user');
-      document.getElementById('screen-dashboard').classList.add('hidden');
-      document.getElementById('screen-profile-select').classList.remove('hidden');
-    }
-
-    function applyTheme() {
-      const isWelton = activeProfile === 'welton';
-      const badge = document.getElementById('user-avatar-badge');
-      const banner = document.getElementById('banner-natal');
-      const btnSaveW = document.getElementById('btn-save-weight');
-      const btnSaveD = document.getElementById('btn-save-dose');
-      const btnSaveC = document.getElementById('btn-save-configs');
-      const dosePill = document.getElementById('dose-label-pill');
-
-      if (isWelton) {
-        badge.className = "w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-white font-black text-base shadow-md shadow-emerald-500/30";
-        banner.className = "p-5 rounded-3xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-emerald-500 relative overflow-hidden shadow-xl text-white";
-        btnSaveW.className = "font-extrabold px-5 py-2.5 rounded-2xl text-sm transition shadow-md bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20";
-        btnSaveD.className = "w-full font-extrabold py-3 rounded-2xl text-xs transition shadow-md bg-emerald-500 hover:bg-emerald-600 text-white mt-2 shadow-emerald-500/20";
-        btnSaveC.className = "w-full font-extrabold py-3 rounded-2xl text-xs transition shadow-md bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/20";
-        dosePill.className = "text-xs px-3 py-1 rounded-full font-bold border border-emerald-300 bg-emerald-50 text-emerald-700";
-      } else {
-        badge.className = "w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 to-fuchsia-500 text-white font-black text-base shadow-md shadow-rose-500/30";
-        banner.className = "p-5 rounded-3xl bg-gradient-to-tr from-rose-500 via-fuchsia-500 to-pink-500 relative overflow-hidden shadow-xl text-white";
-        btnSaveW.className = "font-extrabold px-5 py-2.5 rounded-2xl text-sm transition shadow-md bg-rose-500 hover:bg-rose-600 text-white shadow-rose-500/20";
-        btnSaveD.className = "w-full font-extrabold py-3 rounded-2xl text-xs transition shadow-md bg-rose-500 hover:bg-rose-600 text-white mt-2 shadow-rose-500/20";
-        btnSaveC.className = "w-full font-extrabold py-3 rounded-2xl text-xs transition shadow-md bg-rose-500 hover:bg-rose-600 text-white shadow-rose-500/20";
-        dosePill.className = "text-xs px-3 py-1 rounded-full font-bold border border-rose-300 bg-rose-50 text-rose-700";
-      }
-    }
-
-    function switchTab(tab) {
-      currentTab = tab;
-      ['home', 'medication', 'gym', 'settings'].forEach(t => {
-        document.getElementById(`tab-${t}`).classList.add('hidden');
-        const navBtn = document.getElementById(`nav-${t}`);
-        navBtn.className = "nav-btn flex flex-col items-center gap-1 text-slate-400 transition";
-      });
-
-      document.getElementById(`tab-${tab}`).classList.remove('hidden');
-      const activeNav = document.getElementById(`nav-${tab}`);
-      const isWelton = activeProfile === 'welton';
-      activeNav.className = `nav-btn flex flex-col items-center gap-1 ${isWelton ? 'text-emerald-600' : 'text-rose-600'} transition`;
-    }
-
-    function renderDashboard() {
-      const db = getDB();
-      const user = db[activeProfile];
-
-      document.getElementById('user-name').innerText = user.name;
-      document.getElementById('user-avatar-badge').innerText = user.avatar;
-
-      document.getElementById('weight-initial').innerText = `${user.initial.toFixed(1)} kg`;
-      document.getElementById('weight-current').innerText = `${user.current.toFixed(1)} kg`;
-      document.getElementById('weight-target').innerText = `${user.target.toFixed(1)} kg`;
-
-      document.getElementById('config-initial').value = user.initial;
-      document.getElementById('config-target').value = user.target;
-
-      // Regressiva Natal
-      const today = new Date();
-      const christmas = new Date(today.getFullYear(), 11, 25);
-      if (today > christmas) christmas.setFullYear(christmas.getFullYear() + 1);
-      
-      const diffDays = Math.ceil(Math.abs(christmas - today) / (1000 * 60 * 60 * 24));
-      const diffWeeks = diffDays / 7;
-
-      document.getElementById('days-countdown').innerText = `${diffDays} dias`;
-
-      const totalLossGoal = user.initial - user.target;
-      const currentLoss = user.initial - user.current;
-      let percent = Math.min(100, Math.max(0, (currentLoss / totalLossGoal) * 100));
-      if (isNaN(percent)) percent = 0;
-
-      document.getElementById('progress-percent').innerText = `${percent.toFixed(0)}%`;
-      document.getElementById('progress-bar-fill').style.width = `${percent}%`;
-
-      const remainingKg = user.current - user.target;
-      if (remainingKg > 0 && diffWeeks > 0) {
-        document.getElementById('weekly-rate').innerText = `${(remainingKg / diffWeeks).toFixed(2)} kg/sem`;
-      } else {
-        document.getElementById('weekly-rate').innerText = `Meta Atingida! 🎉`;
-      }
-
-      // Histórico Doses
-      const doseList = document.getElementById('dose-history-list');
-      if (!user.doses || user.doses.length === 0) {
-        doseList.innerHTML = `<span class="text-xs text-slate-400 block text-center py-2">Nenhuma dose registrada.</span>`;
-        document.getElementById('dose-label-pill').innerText = `Dose: -- mg`;
-      } else {
-        doseList.innerHTML = user.doses.slice(-4).reverse().map((d, index) => `
-          <div class="flex justify-between items-center text-xs bg-slate-50 p-3 rounded-2xl border border-slate-200">
-            <span class="text-slate-800 font-bold"><i class="fa-solid fa-syringe mr-1.5 text-slate-400"></i> ${d.mg} mg (${d.site})</span>
-            <span class="text-slate-500">${d.date}</span>
-          </div>
-        `).join('');
-        document.getElementById('dose-label-pill').innerText = `Dose: ${user.doses[user.doses.length - 1].mg} mg`;
-      }
-
-      // Histórico Treinos
-      const workoutList = document.getElementById('workout-history-list');
-      if (!user.workouts) user.workouts = [];
-      document.getElementById('workout-count-month').innerText = `${user.workouts.length} Treinos`;
-
-      if (user.workouts.length === 0) {
-        workoutList.innerHTML = `<span class="text-xs text-slate-400 block text-center py-2">Nenhum treino registrado.</span>`;
-      } else {
-        workoutList.innerHTML = user.workouts.slice(-4).reverse().map(w => `
-          <div class="flex justify-between items-center text-xs bg-slate-50 p-3 rounded-2xl border border-slate-200">
-            <span class="text-slate-800 font-bold"><i class="fa-solid fa-dumbbell mr-1.5 text-slate-400"></i> ${w.type}</span>
-            <span class="text-slate-500">${w.date}</span>
-          </div>
-        `).join('');
-      }
-
-      renderChart(user);
-    }
-
-    function renderChart(user) {
-      const ctx = document.getElementById('weightChart').getContext('2d');
-      const isWelton = activeProfile === 'welton';
-      const color = isWelton ? '#10b981' : '#f43f5e';
-
-      const labels = user.weights.map(w => w.date);
-      const data = user.weights.map(w => w.weight);
-
-      if (chartInstance) chartInstance.destroy();
-
-      chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels.length ? labels : ['Início'],
-          datasets: [{
-            label: 'Peso (kg)',
-            data: data.length ? data : [user.initial],
-            borderColor: color,
-            backgroundColor: isWelton ? 'rgba(16, 185, 129, 0.1)' : 'rgba(244, 63, 94, 0.1)',
-            fill: true,
-            tension: 0.35,
-            borderWidth: 3,
-            pointRadius: 4,
-            pointBackgroundColor: color
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { grid: { display: false }, ticks: { font: { size: 10 } } },
-            y: { grid: { color: 'rgba(0, 0, 0, 0.05)' }, ticks: { font: { size: 10 } } }
-          }
+    function updateInfo(user) {
+        const infoDiv = document.getElementById(`info${user}`);
+        const userLogs = data[user];
+        
+        if (userLogs.length < 2) {
+            infoDiv.innerHTML = `Cadastre mais registros para ver o progresso da meta semanal (-${metas[user]*1000}g).`;
+            return;
         }
-      });
+
+        const initial = userLogs[0].weight;
+        const current = userLogs[userLogs.length - 1].weight;
+        const diff = (initial - current).toFixed(1);
+        
+        infoDiv.innerHTML = `<strong>Perda total:</strong> ${diff} kg | <strong>Meta Semanal:</strong> -${metas[user]*1000}g`;
     }
 
-    function saveWeight(e) {
-      e.preventDefault();
-      const val = parseFloat(document.getElementById('input-weight').value);
-      if (!val) return;
+    window.onload = () => {
+        initChart('Andressa', '#EC4899');
+        initChart('Welton', '#3B82F6');
+    };
+</script>
 
-      const db = getDB();
-      const dateStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-      db[activeProfile].current = val;
-      db[activeProfile].weights.push({ date: dateStr, weight: val });
-      saveDB(db);
-
-      document.getElementById('input-weight').value = '';
-      renderDashboard();
-    }
-
-    function saveDose(e) {
-      e.preventDefault();
-      const mg = document.getElementById('select-dose-mg').value;
-      const site = document.getElementById('select-site').value;
-
-      const db = getDB();
-      const dateStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-      db[activeProfile].doses.push({ date: dateStr, mg, site });
-      saveDB(db);
-
-      renderDashboard();
-      switchTab('home');
-    }
-
-    function recordWorkout(type) {
-      const db = getDB();
-      if (!db[activeProfile].workouts) db[activeProfile].workouts = [];
-
-      const dateStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-      db[activeProfile].workouts.push({ date: dateStr, type });
-      saveDB(db);
-
-      renderDashboard();
-      switchTab('home');
-    }
-
-    function saveConfigs() {
-      const initVal = parseFloat(document.getElementById('config-initial').value);
-      const targetVal = parseFloat(document.getElementById('config-target').value);
-
-      if (initVal && targetVal) {
-        const db = getDB();
-        db[activeProfile].initial = initVal;
-        db[activeProfile].target = targetVal;
-        saveDB(db);
-        renderDashboard();
-        switchTab('home');
-      }
-    }
-  </script>
 </body>
 </html>
