@@ -8,7 +8,8 @@
     <style>
         :root {
             --primary: #4F46E5;
-            --success: #10B981;
+            --andressa-color: #EC4899;
+            --welton-color: #3B82F6;
             --bg: #F3F4F6;
             --card: #FFFFFF;
             --text: #1F2937;
@@ -26,43 +27,43 @@
 
         .container {
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
         }
 
         .header {
             text-align: center;
             background: linear-gradient(135deg, #6366F1, #4F46E5);
             color: white;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
         }
 
         .header h1 {
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
         }
 
         .header p {
-            margin: 5px 0 0 0;
+            margin: 6px 0 0 0;
             opacity: 0.9;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .card {
             background: var(--card);
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
 
         .card-title {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: bold;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -70,53 +71,98 @@
 
         .meta-badge {
             font-size: 0.8rem;
-            background-color: #EEF2FF;
-            color: var(--primary);
-            padding: 4px 8px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-weight: 600;
+            font-weight: 700;
+        }
+
+        .andressa-badge {
+            background-color: #FCE7F3;
+            color: var(--andressa-color);
+        }
+
+        .welton-badge {
+            background-color: #DBEAFE;
+            color: var(--welton-color);
         }
 
         .input-group {
             display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 10px;
+            margin-bottom: 16px;
         }
 
         input[type="number"] {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #D1D5DB;
-            border-radius: 8px;
+            padding: 12px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 10px;
             font-size: 1rem;
             outline: none;
         }
 
+        input[type="number"]:focus {
+            border-color: var(--primary);
+        }
+
         button {
-            background-color: var(--primary);
-            color: white;
             border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
+            padding: 12px 20px;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s;
+            color: white;
+            transition: opacity 0.2s;
         }
 
         button:hover {
-            background-color: #4338CA;
+            opacity: 0.9;
         }
 
-        .progress-info {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: #4B5563;
+        .btn-andressa { background-color: var(--andressa-color); }
+        .btn-welton { background-color: var(--welton-color); }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            background-color: #F9FAFB;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 0.85rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            color: #6B7280;
+            margin-bottom: 2px;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
         }
 
         .chart-container {
             position: relative;
-            height: 200px;
-            margin-top: 15px;
+            height: 220px;
+            margin-top: 10px;
+        }
+
+        .clear-btn {
+            background: transparent;
+            color: #9CA3AF;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -125,20 +171,32 @@
 <div class="container">
     <div class="header">
         <h1>👩‍❤️‍👨 FitCouple</h1>
-        <p>Acompanhamento de Emagrecimento</p>
+        <p>Acompanhamento Integrado de Emagrecimento</p>
     </div>
 
     <!-- ANDRESSA -->
     <div class="card">
         <div class="card-title">
-            <span>Andressa</span>
-            <span class="meta-badge">Meta: -800g / semana</span>
+            <span>🌸 Andressa</span>
+            <span class="meta-badge andressa-badge">Meta: -800g / sem</span>
         </div>
+        
         <div class="input-group">
             <input type="number" id="weightAndressa" step="0.1" placeholder="Peso atual (kg)">
-            <button onclick="addWeight('Andressa')">Salvar</button>
+            <button class="btn-andressa" onclick="addWeight('Andressa')">Salvar</button>
         </div>
-        <div class="progress-info" id="infoAndressa">Carregando histórico...</div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-label">Perda Total</span>
+                <span class="stat-value" id="totalAndressa">-</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Última Semana</span>
+                <span class="stat-value" id="weeklyAndressa">-</span>
+            </div>
+        </div>
+
         <div class="chart-container">
             <canvas id="chartAndressa"></canvas>
         </div>
@@ -147,14 +205,26 @@
     <!-- WELTON -->
     <div class="card">
         <div class="card-title">
-            <span>Welton</span>
-            <span class="meta-badge">Meta: -900g / semana</span>
+            <span>⚡ Welton</span>
+            <span class="meta-badge welton-badge">Meta: -900g / sem</span>
         </div>
+        
         <div class="input-group">
             <input type="number" id="weightWelton" step="0.1" placeholder="Peso atual (kg)">
-            <button onclick="addWeight('Welton')">Salvar</button>
+            <button class="btn-welton" onclick="addWeight('Welton')">Salvar</button>
         </div>
-        <div class="progress-info" id="infoWelton">Carregando histórico...</div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-label">Perda Total</span>
+                <span class="stat-value" id="totalWelton">-</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Última Semana</span>
+                <span class="stat-value" id="weeklyWelton">-</span>
+            </div>
+        </div>
+
         <div class="chart-container">
             <canvas id="chartWelton"></canvas>
         </div>
@@ -163,8 +233,8 @@
 
 <script>
     const metas = {
-        Andressa: 0.8, // 800g por semana
-        Welton: 0.9    // 900g por semana
+        Andressa: 0.8,
+        Welton: 0.9
     };
 
     let data = JSON.parse(localStorage.getItem('fitCoupleData')) || {
@@ -185,8 +255,11 @@
                     data: data[user].map(entry => entry.weight),
                     borderColor: color,
                     backgroundColor: color + '22',
+                    borderWidth: 2,
                     fill: true,
-                    tension: 0.3
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointBackgroundColor: color
                 }]
             },
             options: {
@@ -198,7 +271,7 @@
                 }
             }
         });
-        updateInfo(user);
+        updateStats(user);
     }
 
     function addWeight(user) {
@@ -216,23 +289,43 @@
         charts[user].update();
 
         input.value = '';
-        updateInfo(user);
+        updateStats(user);
     }
 
-    function updateInfo(user) {
-        const infoDiv = document.getElementById(`info${user}`);
+    function updateStats(user) {
+        const totalElem = document.getElementById(`total${user}`);
+        const weeklyElem = document.getElementById(`weekly${user}`);
         const userLogs = data[user];
         
-        if (userLogs.length < 2) {
-            infoDiv.innerHTML = `Cadastre mais registros para ver o progresso da meta semanal (-${metas[user]*1000}g).`;
+        if (userLogs.length === 0) {
+            totalElem.innerText = 'Sem dados';
+            weeklyElem.innerText = 'Sem dados';
+            return;
+        }
+
+        if (userLogs.length === 1) {
+            totalElem.innerText = '1º Registro';
+            weeklyElem.innerText = 'Aguardando 2º';
             return;
         }
 
         const initial = userLogs[0].weight;
         const current = userLogs[userLogs.length - 1].weight;
-        const diff = (initial - current).toFixed(1);
+        const previous = userLogs[userLogs.length - 2].weight;
+
+        const totalDiff = (initial - current).toFixed(1);
+        const weeklyDiff = (previous - current).toFixed(1);
+
+        totalElem.innerText = totalDiff > 0 ? `-${totalDiff} kg` : `+${Math.abs(totalDiff)} kg`;
         
-        infoDiv.innerHTML = `<strong>Perda total:</strong> ${diff} kg | <strong>Meta Semanal:</strong> -${metas[user]*1000}g`;
+        const targetGrams = metas[user] * 1000;
+        const achievedGrams = (weeklyDiff * 1000).toFixed(0);
+        
+        if (weeklyDiff > 0) {
+            weeklyElem.innerText = `-${weeklyDiff} kg (${achievedGrams}/${targetGrams}g)`;
+        } else {
+            weeklyElem.innerText = `${weeklyDiff} kg`;
+        }
     }
 
     window.onload = () => {
